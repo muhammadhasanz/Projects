@@ -13,6 +13,8 @@ services:
       - ./waba-client-app:/var/www/html
       # - ./nginx/waba.conf:/etc/nginx/nginx.conf
       # - ./custom.ini:/usr/local/etc/php/conf.d/custom.ini
+    environment:
+      DB_HOSTNAME: mysql-8
   jarvis:
     image: kacestudio/codeigniter3-dev
     restart: always
