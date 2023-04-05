@@ -4,14 +4,14 @@ services:
   waba:
     # image: kacestudio/codeigniter3-dev
     # command: sh -c chmod +x /var/lib/nginx -R
-    build: .
+    image: kacestudio/codeigniter3
     restart: always
     working_dir: /var/www/html
     ports:
       - 8111:80
     volumes:
       - ./waba-client-app:/var/www/html
-      # - ./nginx/waba.conf:/etc/nginx/nginx.conf
+      - ./nginx/waba.conf:/etc/nginx/nginx.conf
       # - ./custom.ini:/usr/local/etc/php/conf.d/custom.ini
     environment:
       DB_HOSTNAME: mysql-8
@@ -24,14 +24,18 @@ services:
     volumes:
       - ./jarvis:/var/www/html
       - ./nginx/jarvis.conf:/etc/nginx/nginx.conf
+    environment:
+      DB_HOSTNAME: mysql-5
+      DB_USERNAME: root
+      DB_PASSWORD: ''
   mysql-8:
     image: mysql:8.0.32
     container_name: mysql-8
     restart: always
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: yes
-    ports:
-      - 3306:3306
+    # ports:
+    #   - 3306:3306
     volumes:
       - ./mysql-8:/var/lib/mysql
   mysql-5:
