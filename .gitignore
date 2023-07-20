@@ -1,5 +1,12 @@
-jarvis
-waba-client-app
-mysql-5
-mysql-8
-template-cekeditor5-waba
+# jarvis
+# waba-client-app
+# mysql-5
+# mysql-8
+# template-cekeditor5-waba
+*
+!/nginx
+!custom.ini
+!docker-compose.yml
+!Dockerfile
+!dump_waba.sql
+!jarvis_crm.sql

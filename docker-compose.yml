@@ -1,10 +1,11 @@
 version: '3.8'
 
 services:
-  waba:
-    # image: kacestudio/codeigniter3-dev
-    # command: sh -c chmod +x /var/lib/nginx -R
+  waba-client:
     image: kacestudio/codeigniter3
+    container_name: waba-client
+    # mem_limit: 110m
+    # mem_reservation: 100M
     restart: always
     working_dir: /var/www/html
     ports:
@@ -12,11 +13,39 @@ services:
     volumes:
       - ./waba-client-app:/var/www/html
       - ./nginx/waba.conf:/etc/nginx/nginx.conf
-      # - ./custom.ini:/usr/local/etc/php/conf.d/custom.ini
+    environment:
+      DB_HOSTNAME: mysql-8
+  waba-client2:
+    image: kacestudio/codeigniter3
+    container_name: waba-client2
+    # mem_limit: 110m
+    # mem_reservation: 100M
+    restart: always
+    working_dir: /var/www/html
+    ports:
+      - 8114:80
+    volumes:
+      - ./waba-client-app2:/var/www/html
+      - ./nginx/waba.conf:/etc/nginx/nginx.conf
+    environment:
+      DB_HOSTNAME: mysql-8
+  waba-hq:
+    image: kacestudio/codeigniter3
+    container_name: waba-hq
+    # mem_limit: 110m
+    # mem_reservation: 100M
+    restart: always
+    working_dir: /var/www/html
+    ports:
+      - 8121:80
+    volumes:
+      - ./waba-hq-app:/var/www/html
+      - ./nginx/waba.conf:/etc/nginx/nginx.conf
     environment:
       DB_HOSTNAME: mysql-8
   jarvis:
-    image: kacestudio/codeigniter3-dev
+    image: kacestudio/codeigniter3
+    container_name: jarvis
     restart: always
     working_dir: /var/www/html
     ports:
@@ -30,12 +59,14 @@ services:
       DB_PASSWORD: ''
   mysql-8:
     image: mysql:8.0.32
+    # mem_limit: 612m
+    # mem_reservation: 228M
     container_name: mysql-8
     restart: always
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: yes
-    # ports:
-    #   - 3306:3306
+    ports:
+      - 3308:3306
     volumes:
       - ./mysql-8:/var/lib/mysql
   mysql-5:
@@ -48,3 +79,33 @@ services:
       - 3307:3306
     volumes:
       - ./mysql-5:/var/lib/mysql
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+  
+  learn-node:
+    container_name: learn-node
+    build: ./learn-node/.
+    restart: always
+    ports:
+      - 8131:3000
+    volumes:
+      - ./learn-node:/usr/src/app
+  
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: P@s5w0rd
+    volumes:
+      - ./mongodb:/data/db
+
+# networks:
+#   default:
+#     name: projects_default
+#     driver: nat
